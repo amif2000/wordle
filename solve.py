@@ -1,6 +1,7 @@
 tries = [
-    ('TEARS', 'oo  o'),
-    ('SMITE', 'x  ox')
+    ('TEARS', '  x o'),
+    ('SNAIL', 'x x x'),
+    ('SMALL', 'x x x')
 ]
 
 occurence = {
@@ -32,14 +33,14 @@ occurence = {
     'Q': 0.1962
 }
 
-knowledge = []
-for line in tries:
-    letters = line[0]
-    score = line[1]
-    know = []
-    for i in range(5):
-        know.append((letters[i], score[i]))
-    knowledge.append(know)
+# knowledge = []
+# for line in tries:
+#     letters = line[0]
+#     score = line[1]
+#     know = []
+#     for i in range(5):
+#         know.append((letters[i], score[i]))
+#     knowledge.append(know)
 
 with open('valid_words.txt') as word_file:
     words = word_file.read().split()
@@ -47,34 +48,38 @@ with open('valid_words.txt') as word_file:
     with open('options.txt', 'w') as options_file:
         count = 0
         options = []
-        for word in words:
+        for w in words:
             fail = False
-            for know in knowledge:
+            for t in tries:
+                letters = t[0]
+                scores = t[1]
+                word = w
                 for i in range(5):
-                    datum = know[i]
-                    letter = datum[0]
-                    score = datum[1]
-                    if score == ' ':
-                        if word.find(letter) >= 0:
+                    if scores[i] == 'x':
+                        if word[i] != letters[i]:
                             fail = True
-                    elif score == 'x':
-                        if word[i] != letter:
+                        else:
+                            wlist = list(word)
+                            wlist[i] = ' '
+                            word = "".join(wlist)
+                for i in range(5):
+                    if scores[i] == ' ':
+                        if word.find(letters[i]) >= 0:
                             fail = True
-                    else: # 'o'
-                        if word[i] == letter or word.find(letter) < 0:
+                    elif scores[i] == 'o':
+                        if word[i] == letters[i] or word.find(letters[i]) < 0:
                             fail = True
             if not fail:
                 seen = [False, False, False, False, False]
-                for line in tries:
+                for t in tries:
                     for i in range(5):
-                        if line[0].find(word[i]) >= 0:
+                        if t[0].find(w[i]) >= 0:
                             seen[i] = True
                 occ = 0.0
-                print(seen)
                 for i in range(5):
                     if not seen[i]:
-                        occ += occurence[word[i]]
-                options.append((word, occ))
+                        occ += occurence[w[i]]
+                options.append((w, occ))
                 count += 1
         options.sort(key=lambda tuple: tuple[1], reverse=True)
         for option in options:
