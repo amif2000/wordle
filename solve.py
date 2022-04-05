@@ -1,7 +1,5 @@
 tries = [
-    ('TEARS', '  x o'),
-    ('SNAIL', 'x x x'),
-    ('SMALL', 'x x x')
+    ('IRATE', '  oo ')
 ]
 
 occurence = {
@@ -79,6 +77,9 @@ with open('valid_words.txt') as word_file:
                 for i in range(5):
                     if not seen[i]:
                         occ += occurence[w[i]]
+                        for j in range(i+1, 5):
+                            if w[j] == w[i]:
+                                seen[j] = True
                 options.append((w, occ))
                 count += 1
         options.sort(key=lambda tuple: tuple[1], reverse=True)
