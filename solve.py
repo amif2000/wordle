@@ -1,5 +1,6 @@
 tries = [
-    ('IRATE', '  oo ')
+    ('IRATE', 'oox  '),
+    ('LIARS', 'ooxo ')
 ]
 
 occurence = {
